@@ -71,7 +71,7 @@ resource "aws_route_table_association" "private_association" {
 
 module "alb_sg" {
   source = "terraform-in-action/sg/aws"
-  vpc_id = module.vpc.vpc_id
+  vpc_id = aws_vpc.main.id
   ingress_rules = [
     {
       port        = 80
@@ -82,18 +82,18 @@ module "alb_sg" {
 
 module "web_sg" {
   source = "terraform-in-action/sg/aws"
-  vpc_id = module.vpc.vpc_id
+  vpc_id = aws_vpc.main.id
   ingress_rules = [
     {
       port        = 80
-      security_groups = [module.lb_sg.security_group.id]
+      security_groups = [module.alb_sg.security_group.id]
     }
   ]
 }
 
 module "db_sg" {
   source = "terraform-in-action/sg/aws"
-  vpc_id = module.vpc.vpc_id
+  vpc_id = aws_vpc.main.id
   ingress_rules = [
     {
       port            = 5432
